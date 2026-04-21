@@ -1,0 +1,19 @@
+node_modules/
+
+# Local credentials — never commit
+.env.local
+**/.env.local
+
+# Generated artefacts — gitignored globally
+runs/
+flow_runs/
+ux_testing/runs/
+flow_review/flow_runs/
+
+# Logs and macOS junk
+*.log
+.DS_Store
+
+# Scratch / planning files sometimes dropped at root
+*.tmp
+*.swp

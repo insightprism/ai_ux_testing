@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "recipe_id": "recipe_a",
+  "run_id": "20260101-120000",
+  "reviewed_at": "2026-01-01T12:10:00Z",
+  "reviewer": "claude-opus-manual",
+  "overall_status": "pass",
+  "checks": [
+    {
+      "instruction": "Home page renders without errors.",
+      "verdict": "pass",
+      "evidence": "Page loaded with expected layout; no error banners visible.",
+      "screenshot_refs": ["runs/recipe_a__20260101-120000/01_home_desktop.png"]
+    },
+    {
+      "instruction": "Header shows the product name.",
+      "verdict": "pass",
+      "evidence": "Header prominently displays 'DatsMe' on the left.",
+      "screenshot_refs": ["runs/recipe_a__20260101-120000/01_home_desktop.png"]
+    },
+    {
+      "instruction": "Footer has a copyright notice.",
+      "verdict": "pass",
+      "evidence": "Footer shows '© 2026 DatsMe' at bottom-center.",
+      "screenshot_refs": ["runs/recipe_a__20260101-120000/01_home_desktop.png"]
+    }
+  ],
+  "observed": {
+    "_schema_frozen": true,
+    "header_text": "DatsMe",
+    "footer_text": "© 2026 DatsMe",
+    "sections_found": ["hero", "features", "footer"],
+    "has_login_button": true,
+    "error_banners": []
+  },
+  "summary": "Home page renders cleanly with expected header, body sections, and footer."
+}

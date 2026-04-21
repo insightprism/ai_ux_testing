@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "recipe_id": "recipe_a",
+  "run_id": "20260217-100000",
+  "reviewed_at": "2026-02-17T10:10:00Z",
+  "reviewer": "claude-opus-manual",
+  "overall_status": "pass",
+  "checks": [
+    { "instruction": "Home page renders without errors.", "verdict": "pass", "evidence": "No errors visible." },
+    { "instruction": "Header shows the product name.", "verdict": "pass", "evidence": "Header is now correct." },
+    { "instruction": "Footer has a copyright notice.", "verdict": "pass", "evidence": "Footer still shows © 2026 DatsMe." }
+  ],
+  "observed": {
+    "header_text": "DatsMe",
+    "footer_text": "© 2026 DatsMe",
+    "sections_found": ["hero", "features", "footer"],
+    "has_login_button": true,
+    "error_banners": []
+  },
+  "summary": "Previously-failing check now passes (hypothetical)."
+}

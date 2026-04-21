@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "recipe_id": "recipe_a",
+  "run_id": "20260101-120000",
+  "reviewed_at": "2026-01-01T12:10:00Z",
+  "reviewer": "claude-opus-manual",
+  "overall_status": "pass",
+  "checks": [
+    {
+      "instruction": "Home page renders without errors.",
+      "verdict": "ok",
+      "evidence": "looks fine"
+    }
+  ],
+  "observed": { "header_text": "DatsMe" },
+  "summary": "renders."
+}

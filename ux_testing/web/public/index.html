@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>AI UX Testing — Recipe Builder</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>AI UX Testing</h1>
+    <p class="sub">Describe a test in plain English. Run it. Let an AI tell you what it saw.</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Existing recipes</h2>
+      <ul id="recipe-list" class="recipe-list"><li class="muted">loading…</li></ul>
+      <button class="secondary" id="btn-new">+ New recipe</button>
+    </section>
+
+    <section class="card" id="form-card" hidden>
+      <h2 id="form-title">New recipe</h2>
+
+      <label class="field">
+        <span>ID <small>(no spaces — used as the filename)</small></span>
+        <input id="f-id" placeholder="sara_personality_friend_view" />
+      </label>
+
+      <label class="field">
+        <span>Name</span>
+        <input id="f-name" placeholder="Sara personality report — friend view" />
+      </label>
+
+      <label class="field">
+        <span>Description</span>
+        <textarea id="f-description" rows="2" placeholder="What this test is checking, in one sentence."></textarea>
+      </label>
+
+      <label class="field">
+        <span>Base URL</span>
+        <input id="f-base-url" placeholder="http://localhost:19995" />
+      </label>
+
+      <fieldset class="field">
+        <legend>Login <small>(leave blank if the test is anonymous)</small></legend>
+        <label><span>Login URL path</span><input id="f-login-url" placeholder="/login" /></label>
+        <label><span>Username</span><input id="f-login-username" placeholder="markly.1" /></label>
+        <label>
+          <span>Password (from credential store)</span>
+          <select id="f-login-password-env"><option value="">— none —</option></select>
+        </label>
+        <details class="credential-manager">
+          <summary>+ Add / update a credential</summary>
+          <label><span>Env var name <small>(UPPER_SNAKE_CASE)</small></span><input id="cred-name" placeholder="RECIPE_MARKLY1_PWD" /></label>
+          <label><span>Value</span><input id="cred-value" type="password" placeholder="markly123" /></label>
+          <button class="secondary" id="btn-save-credential" type="button">Save credential</button>
+          <p class="muted small">Saved to <code>.env.local</code> on this machine. Never leaves your computer.</p>
+        </details>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend>Steps</legend>
+
+        <div class="mode-toggle" role="tablist" aria-label="Step input mode">
+          <button type="button" class="mode-btn active" data-mode="record" role="tab" aria-selected="true">🎥 Record</button>
+          <button type="button" class="mode-btn" data-mode="manual" role="tab" aria-selected="false">✏️ Manual</button>
+        </div>
+
+        <div id="mode-record" class="mode-panel">
+          <div id="record-idle">
+            <p class="muted small">Click <strong>Start recording</strong>. A real browser will open — perform the flow once (log in, navigate, click). When you close the browser, your steps will appear below.</p>
+            <button type="button" id="btn-record-start">● Start recording</button>
+          </div>
+
+          <div id="record-active" hidden>
+            <div class="recording-banner">
+              <span class="rec-dot"></span>
+              <div class="rec-text">
+                <strong>RECORDING</strong>
+                <div class="small">
+                  To <strong>save</strong> your steps: <strong>close the browser window</strong> (click its X).
+                  <br />The button below only cancels and throws away the recording.
+                </div>
+              </div>
+              <button type="button" id="btn-record-stop" class="danger">✕ Discard</button>
+            </div>
+          </div>
+
+          <div id="record-result" class="small muted" hidden></div>
+        </div>
+
+        <div id="mode-manual" class="mode-panel" hidden>
+          <div id="steps-list"></div>
+          <button class="secondary" id="btn-add-step" type="button">+ Add step</button>
+        </div>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend>AI instructions <small>(plain-English things the AI should verify in the screenshots)</small></legend>
+        <div id="checks-list"></div>
+        <button class="secondary" id="btn-add-check" type="button">+ Add instruction</button>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend>Viewports</legend>
+        <label class="inline"><input type="checkbox" id="f-vp-mobile" checked /> Mobile (375px)</label>
+        <label class="inline"><input type="checkbox" id="f-vp-desktop" checked /> Desktop (1280px)</label>
+      </fieldset>
+
+      <div class="actions">
+        <button id="btn-save" type="button">Save recipe</button>
+        <button class="secondary" id="btn-cancel" type="button">Cancel</button>
+      </div>
+
+      <pre id="save-result" class="result" hidden></pre>
+      <pre id="save-errors" class="errors" hidden></pre>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "name": "ai-ux-testing",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI-powered UX tooling. Two tools, one codebase: pass/fail UX regression (ux_testing/) and qualitative flow-friction review (flow_review/). Shared plumbing lives in shared/.",
+  "scripts": {
+    "form":                "node ux_testing/web/server/server.js",
+    "ux-run":              "node ux_testing/runner/run.js",
+    "ux-review":           "node ux_testing/runner/review.js",
+    "ux-approve":          "node ux_testing/runner/approve.js",
+    "ux-diff":             "node ux_testing/runner/diff.js",
+    "ux-save-result":      "node ux_testing/runner/save_result.js",
+    "ux-prepare-review":   "node ux_testing/runner/prepare_review.js",
+    "flow-capture":        "node flow_review/runner/capture_flow.js",
+    "flow-review":         "node flow_review/runner/review_flow.js",
+    "flow-approve":        "node flow_review/runner/approve_flow.js",
+    "flow-compare":        "node flow_review/runner/compare_flow.js",
+    "test":                "node tests/run_all.js",
+    "cleanup":             "./cleanup_runs.sh && ./cleanup_flow_runs.sh",
+    "list-recipes":        "node -e \"['ux_testing/recipes','flow_review/recipes'].forEach(d=>{const fs=require('fs');if(fs.existsSync(d))fs.readdirSync(d).filter(f=>f.endsWith('.json')).forEach(f=>console.log(d+'/'+f))})\""
+  },
+  "dependencies": {
+    "express":    "^4.19.2",
+    "playwright": "^1.52.0"
+  }
+}

@@ -1,0 +1,189 @@
+:root {
+  --bg: #0f1220;
+  --panel: #191c2e;
+  --panel-2: #232740;
+  --text: #e7e9f5;
+  --muted: #9aa0b4;
+  --accent: #6d8cff;
+  --danger: #ff6b6b;
+  --ok: #4ade80;
+  --border: #2a2f48;
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+body { min-height: 100vh; }
+
+header { padding: 20px 16px; border-bottom: 1px solid var(--border); }
+header h1 { margin: 0 0 4px; font-size: 20px; }
+header .sub { margin: 0; color: var(--muted); font-size: 14px; }
+
+main { max-width: 720px; margin: 0 auto; padding: 16px; display: grid; gap: 16px; }
+
+.card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+.card h2 { margin: 0 0 12px; font-size: 16px; }
+
+.field { display: block; margin-bottom: 14px; }
+.field > span { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+.field small { color: var(--muted); font-weight: normal; }
+
+fieldset.field { border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; }
+fieldset.field legend { padding: 0 6px; color: var(--muted); font-size: 13px; }
+fieldset.field label { display: block; margin-bottom: 10px; }
+
+input, textarea, select {
+  width: 100%;
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 15px;
+  font-family: inherit;
+}
+input:focus, textarea:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+label.inline { display: inline-flex; align-items: center; gap: 6px; margin-right: 14px; font-size: 14px; }
+label.inline input[type=checkbox] { width: auto; }
+
+button {
+  background: var(--accent);
+  color: #0f1220;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+button.secondary { background: var(--panel-2); color: var(--text); border: 1px solid var(--border); font-weight: 500; }
+button:disabled { opacity: 0.5; cursor: default; }
+
+.actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+
+.recipe-list { list-style: none; padding: 0; margin: 0 0 12px; display: grid; gap: 6px; }
+.recipe-list li { padding: 10px; background: var(--panel-2); border-radius: 8px; display: flex; justify-content: space-between; gap: 8px; align-items: center; font-size: 14px; }
+.recipe-list li .meta { color: var(--muted); font-size: 12px; }
+.recipe-list li button { padding: 6px 10px; font-size: 12px; }
+
+.step-row, .check-row {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+.step-row .inner, .check-row .inner { display: grid; gap: 6px; min-width: 0; }
+.step-row select, .step-row input, .check-row input { background: var(--panel); }
+.btn-remove { background: transparent; color: var(--danger); border: 1px solid var(--border); padding: 4px 8px; font-size: 12px; height: fit-content; }
+
+.num-badge {
+  min-width: 26px;
+  height: 26px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #0f1220;
+  font-weight: 700;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+
+.result, .errors {
+  background: #0a0d1c;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 13px;
+}
+.errors { border-color: var(--danger); color: var(--danger); }
+
+.credential-manager { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
+.credential-manager summary { cursor: pointer; color: var(--accent); font-size: 13px; margin-bottom: 8px; }
+
+/* ----- Record / Manual mode toggle ----- */
+.mode-toggle {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px;
+  margin-bottom: 12px;
+  background: var(--panel-2);
+}
+.mode-btn {
+  background: transparent;
+  color: var(--muted);
+  border: 0;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.mode-btn.active {
+  background: var(--accent);
+  color: #0f1220;
+  font-weight: 600;
+}
+
+/* ----- Recording indicator ----- */
+.recording-banner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(90deg, rgba(255,107,107,0.15), rgba(255,107,107,0.05));
+  border: 1.5px solid var(--danger);
+  border-radius: 10px;
+  padding: 12px;
+}
+.rec-dot {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--danger);
+  box-shadow: 0 0 0 0 rgba(255,107,107,0.7);
+  animation: rec-pulse 1.4s infinite;
+}
+@keyframes rec-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(255,107,107,0.7); }
+  70%  { box-shadow: 0 0 0 10px rgba(255,107,107,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,107,107,0); }
+}
+.rec-text strong { color: var(--danger); letter-spacing: 0.08em; font-size: 13px; }
+.rec-text .small { color: var(--muted); }
+button.danger { background: var(--danger); color: #0f1220; }
+
+/* Whole-page hint when recording: red border at top */
+body.is-recording::before {
+  content: "● RECORDING — to SAVE, close the browser window (click its X). Do NOT use Discard.";
+  position: fixed; top: 0; left: 0; right: 0;
+  background: var(--danger); color: #0f1220;
+  padding: 6px 12px; text-align: center;
+  font-weight: 700; font-size: 13px; letter-spacing: 0.05em;
+  z-index: 9999;
+  animation: rec-pulse-bg 1.6s infinite;
+}
+body.is-recording { padding-top: 30px; }
+@keyframes rec-pulse-bg {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.7; }
+}
+
+@media (min-width: 640px) {
+  header { padding: 24px 24px; }
+  main { padding: 24px; }
+  .step-row { grid-template-columns: 1fr auto; }
+}

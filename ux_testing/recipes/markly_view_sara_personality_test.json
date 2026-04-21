@@ -1,0 +1,26 @@
+{
+  "id": "markly_view_sara_personality_test",
+  "name": "markly_view_sara_personality_test",
+  "description": "sign in as markly and go view sara personality test result.",
+  "target": {
+    "base_url": "http://localhost:19995/sara.1"
+  },
+  "steps": [
+    {
+      "action": "goto",
+      "path": "/"
+    }
+  ],
+  "checks": [
+    "can you look at the report and give a few sentence summary of the report."
+  ],
+  "viewports": [
+    "mobile",
+    "desktop"
+  ],
+  "login": {
+    "url": "http://localhost:19995/login",
+    "username": "markly.1",
+    "password_env": "RECIPE_MARKLY1_PWD"
+  }
+}

@@ -1,0 +1,104 @@
+# Example GitHub Actions workflow for ai_ux_testing regression checks.
+# Copy this file to your project as `.github/workflows/ai-ux-regression.yml`
+# and adapt the `RECIPE_ID` value + trigger conditions to taste.
+#
+# Prerequisites:
+#   - `ai_ux_testing/` is checked into this repo at the path configured below.
+#   - The following secrets are set on the repo:
+#       ANTHROPIC_API_KEY  (required for Claude reviewer)
+#       GOOGLE_API_KEY     (optional — only if you use a gemini model)
+#   - The target URL is reachable from the runner (i.e. you're testing a
+#     deployed preview, not localhost). For localhost testing, start your
+#     dev server in a "services" step before running the recipe.
+
+name: AI UX Regression
+
+on:
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    env:
+      RECIPE_ID: sara_personality_friend_view            # <-- change me
+      AI_UX_DIR: ./tools/ai_ux_testing                   # <-- path to ai_ux_testing in your repo
+      # Opt in — skipping this would run the recipe without calling the AI reviewer.
+      AI_UX_TEST_AUTO_REVIEW: '1'
+      AI_UX_REVIEW_MODEL: haiku                          # haiku | sonnet | opus | gemini-flash | gemini-pro
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: ${{ env.AI_UX_DIR }}
+        run: npm ci
+
+      - name: Install Playwright browsers
+        working-directory: ${{ env.AI_UX_DIR }}
+        run: npx playwright install --with-deps chromium
+
+      - name: Run recipe + auto-review
+        working-directory: ${{ env.AI_UX_DIR }}
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GOOGLE_API_KEY:    ${{ secrets.GOOGLE_API_KEY }}
+        run: |
+          node runner/run.js "$RECIPE_ID" --review --model "$AI_UX_REVIEW_MODEL"
+
+      - name: Diff vs. baseline
+        id: diff
+        working-directory: ${{ env.AI_UX_DIR }}
+        run: node runner/diff.js "$RECIPE_ID"
+        continue-on-error: true
+
+      - name: Locate latest run folder
+        id: runfolder
+        working-directory: ${{ env.AI_UX_DIR }}
+        run: |
+          latest=$(ls -1d runs/${RECIPE_ID}__* 2>/dev/null | sort -r | head -n1)
+          echo "dir=$latest" >> "$GITHUB_OUTPUT"
+
+      - name: Upload run artifacts
+        if: always() && steps.runfolder.outputs.dir != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-ux-${{ env.RECIPE_ID }}
+          path: |
+            ${{ env.AI_UX_DIR }}/${{ steps.runfolder.outputs.dir }}/*.png
+            ${{ env.AI_UX_DIR }}/${{ steps.runfolder.outputs.dir }}/run.json
+            ${{ env.AI_UX_DIR }}/${{ steps.runfolder.outputs.dir }}/result.json
+            ${{ env.AI_UX_DIR }}/${{ steps.runfolder.outputs.dir }}/diff.md
+
+      - name: Comment diff on PR
+        if: github.event_name == 'pull_request' && steps.runfolder.outputs.dir != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const diffPath = `${process.env.AI_UX_DIR}/${{ steps.runfolder.outputs.dir }}/diff.md`;
+            if (!fs.existsSync(diffPath)) {
+              core.info('No diff.md — skipping comment.');
+              return;
+            }
+            const body = '### AI UX regression — `${{ env.RECIPE_ID }}`\n\n' + fs.readFileSync(diffPath, 'utf8');
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body,
+            });
+
+      - name: Fail job on regression
+        if: steps.diff.outcome == 'failure'
+        run: |
+          echo "::error::AI UX regression detected — see diff.md above and the uploaded artifact."
+          exit 1

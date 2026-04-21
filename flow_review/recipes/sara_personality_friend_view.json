@@ -1,0 +1,46 @@
+{
+  "id": "sara_personality_friend_view",
+  "name": "Sara personality report — friend view (deliberately worsened for regression test)",
+  "description": "Adds redundant clicks + backtracks to simulate a UX regression; compare against the approved reference.",
+  "target": { "base_url": "http://localhost:19995" },
+  "login": {
+    "url": "/login",
+    "username": "markly.1",
+    "password_env": "RECIPE_MARKLY1_PWD"
+  },
+  "steps": [
+    { "action": "goto", "path": "/sara.1/" },
+    { "action": "wait", "ms": 1500 },
+    { "action": "screenshot", "name": "sara_profile_landing" },
+
+    { "action": "scroll", "direction": "down", "amount": 900 },
+    { "action": "wait", "ms": 500 },
+    { "action": "screenshot", "name": "about_me_section" },
+
+    { "action": "click_text", "text": "My Big Five" },
+    { "action": "wait", "ms": 1200 },
+    { "action": "screenshot", "name": "personality_report_modal_top" },
+
+    { "action": "scroll_inside", "text": "Your Big Five Personality Test", "direction": "down", "amount": 500 },
+    { "action": "wait", "ms": 400 },
+    { "action": "screenshot", "name": "personality_report_modal_mid" },
+
+    { "action": "scroll_inside", "text": "Your Big Five Personality Test", "direction": "bottom" },
+    { "action": "wait", "ms": 400 },
+    { "action": "screenshot", "name": "personality_report_modal_bottom" },
+
+    { "action": "goto", "path": "/sara.1/" },
+    { "action": "wait", "ms": 800 },
+    { "action": "click_text", "text": "My Big Five" },
+    { "action": "wait", "ms": 800 },
+    { "action": "screenshot", "name": "redundant_revisit" }
+  ],
+  "checks": [
+    "Modal opens after clicking the Personality card."
+  ],
+  "viewports": ["mobile", "desktop"],
+  "flow_review": {
+    "captureVideo": false,
+    "describedUserIntent": "A friend visits sara.1's profile to read her personality report."
+  }
+}

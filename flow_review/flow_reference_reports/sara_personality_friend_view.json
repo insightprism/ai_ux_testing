@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "recipeId": "sara_personality_friend_view",
+  "runId": "20260420-211337",
+  "reviewedAt": "2026-04-20T21:13:37Z",
+  "reviewerModel": "claude-sonnet-4-6",
+  "perViewportMetrics": {
+    "mobile": {
+      "totalDurationMs": 21974,
+      "totalClickCount": 1,
+      "totalNavigationCount": 1,
+      "totalScrollCount": 3,
+      "detectedBacktrackCount": 0,
+      "stepDurations": [
+        {
+          "stepIndex": 0,
+          "action": "goto",
+          "path": "/sara.1/",
+          "durationMs": 16199
+        },
+        {
+          "stepIndex": 1,
+          "action": "wait",
+          "durationMs": 1502
+        },
+        {
+          "stepIndex": 2,
+          "action": "screenshot",
+          "durationMs": 176
+        },
+        {
+          "stepIndex": 3,
+          "action": "scroll",
+          "durationMs": 303
+        },
+        {
+          "stepIndex": 4,
+          "action": "wait",
+          "durationMs": 501
+        },
+        {
+          "stepIndex": 5,
+          "action": "screenshot",
+          "durationMs": 123
+        },
+        {
+          "stepIndex": 6,
+          "action": "click_text",
+          "durationMs": 134
+        },
+        {
+          "stepIndex": 7,
+          "action": "wait",
+          "durationMs": 1202
+        },
+        {
+          "stepIndex": 8,
+          "action": "screenshot",
+          "durationMs": 128
+        },
+        {
+          "stepIndex": 9,
+          "action": "scroll_inside",
+          "durationMs": 313
+        },
+        {
+          "stepIndex": 10,
+          "action": "wait",
+          "durationMs": 402
+        },
+        {
+          "stepIndex": 11,
+          "action": "screenshot",
+          "durationMs": 123
+        },
+        {
+          "stepIndex": 12,
+          "action": "scroll_inside",
+          "durationMs": 308
+        },
+        {
+          "stepIndex": 13,
+          "action": "wait",
+          "durationMs": 401
+        },
+        {
+          "stepIndex": 14,
+          "action": "screenshot",
+          "durationMs": 159
+        }
+      ]
+    },
+    "desktop": {
+      "totalDurationMs": 22859,
+      "totalClickCount": 1,
+      "totalNavigationCount": 1,
+      "totalScrollCount": 3,
+      "detectedBacktrackCount": 0,
+      "stepDurations": [
+        {
+          "stepIndex": 0,
+          "action": "goto",
+          "path": "/sara.1/",
+          "durationMs": 16536
+        },
+        {
+          "stepIndex": 1,
+          "action": "wait",
+          "durationMs": 1501
+        },
+        {
+          "stepIndex": 2,
+          "action": "screenshot",
+          "durationMs": 255
+        },
+        {
+          "stepIndex": 3,
+          "action": "scroll",
+          "durationMs": 304
+        },
+        {
+          "stepIndex": 4,
+          "action": "wait",
+          "durationMs": 501
+        },
+        {
+          "stepIndex": 5,
+          "action": "screenshot",
+          "durationMs": 186
+        },
+        {
+          "stepIndex": 6,
+          "action": "click_text",
+          "durationMs": 142
+        },
+        {
+          "stepIndex": 7,
+          "action": "wait",
+          "durationMs": 1200
+        },
+        {
+          "stepIndex": 8,
+          "action": "screenshot",
+          "durationMs": 260
+        },
+        {
+          "stepIndex": 9,
+          "action": "scroll_inside",
+          "durationMs": 312
+        },
+        {
+          "stepIndex": 10,
+          "action": "wait",
+          "durationMs": 401
+        },
+        {
+          "stepIndex": 11,
+          "action": "screenshot",
+          "durationMs": 289
+        },
+        {
+          "stepIndex": 12,
+          "action": "scroll_inside",
+          "durationMs": 316
+        },
+        {
+          "stepIndex": 13,
+          "action": "wait",
+          "durationMs": 401
+        },
+        {
+          "stepIndex": 14,
+          "action": "screenshot",
+          "durationMs": 255
+        }
+      ]
+    }
+  },
+  "frictionVerdict": "low",
+  "frictionEvidenceBulletPoints": [
+    "User must scroll down from the profile landing to reach the About Me / Personality card before they can click — the entry point is not above the fold on mobile",
+    "Personality card in the About Me section shows only a truncated preview (Big Five label + brief snippet), giving little affordance that clicking opens a full detailed modal",
+    "Modal content is long and requires two internal scroll actions to reach the scoring table and 'What next?' section — dense text with no in-modal navigation anchors",
+    "Page load took ~16 s on both viewports, which is the dominant time cost and could erode confidence before interaction",
+    "No backtracks detected; single click opened the modal cleanly — core happy-path friction is low once the user finds the card"
+  ],
+  "suggestedFlowImprovements": [
+    "Add a visible 'View full personality report' button or chevron on the Personality card to make it obviously interactive and distinguish it from static content",
+    "Consider surfacing a brief teaser score or chart thumbnail on the card so users understand what clicking will reveal before committing",
+    "Add an in-modal sticky header or section jump links (Overview / Strengths / Scores) so users can navigate the long report without sequential scrolling",
+    "Investigate and reduce the ~16 s initial page load time — lazy-load non-critical sections (Interests, Memories) after LCP to unblock the above-the-fold profile header sooner",
+    "On mobile, consider placing the Personality card higher in the About Me layout or adding a shortcut link in the profile header area to reduce required scroll distance"
+  ],
+  "humanReadableSummary": "The core flow is clean: one scroll to reach the Personality card, one click to open the modal, two scrolls to read the full report, and no backtracks on either viewport. The main friction points are the ~16-second page load and the need to scroll below the fold before the Personality entry point is reachable, plus the modal's length requiring sequential scrolling with no navigation aids. Improving initial load performance and making the Personality card more visually distinct and clickable would meaningfully reduce hesitation for a first-time visitor.",
+  "_isReference": true
+}

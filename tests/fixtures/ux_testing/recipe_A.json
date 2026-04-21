@@ -1,0 +1,16 @@
+{
+  "id": "recipe_a",
+  "name": "Recipe A — fixture",
+  "description": "Hand-authored fixture for baseline/diff tests.",
+  "target": { "base_url": "http://localhost:19995" },
+  "steps": [
+    { "action": "goto", "path": "/" },
+    { "action": "screenshot", "name": "home" }
+  ],
+  "checks": [
+    "Home page renders without errors.",
+    "Header shows the product name.",
+    "Footer has a copyright notice."
+  ],
+  "viewports": ["desktop"]
+}
