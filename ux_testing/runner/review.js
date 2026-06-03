@@ -20,7 +20,7 @@ const { ROOT, latestRun, findRun } = require('../lib/runs');
 const { getReviewer, resolveModel } = require('../lib/reviewer');
 
 function parseArgs(argv) {
-  const out = { recipeId: null, runId: null, model: null, dryRun: false, force: false };
+  const out = { recipeId: null, runId: null, model: null, dryRun: false, force: false, report: null };
   const args = argv.slice(2);
   for (let i = 0; i < args.length; i++) {
     const a = args[i];
@@ -28,6 +28,11 @@ function parseArgs(argv) {
     if (a === '--model') { out.model = args[++i]; continue; }
     if (a === '--dry-run') { out.dryRun = true; continue; }
     if (a === '--force') { out.force = true; continue; }
+    // --report <path>: ALSO copy the validated result.json to <path>, so a caller (e.g. Testbench's
+    // script-method executor, which substitutes {report_path}) gets the result at a deterministic
+    // location without having to discover the latest run folder. The canonical run-folder
+    // result.json is still written as before.
+    if (a === '--report') { out.report = args[++i]; continue; }
     if (a === '--help' || a === '-h') { printUsage(); process.exit(0); }
     if (!out.recipeId) { out.recipeId = a; continue; }
     console.error(`Unknown argument: ${a}`);
@@ -39,7 +44,9 @@ function parseArgs(argv) {
 
 function printUsage() {
   console.error('Usage:');
-  console.error('  node runner/review.js <recipe-id> [--run <ts>] [--model <preset|id>] [--dry-run] [--force]');
+  console.error('  node runner/review.js <recipe-id> [--run <ts>] [--model <preset|id>] [--dry-run] [--force] [--report <path>]');
+  console.error('');
+  console.error('  --report <path>  also write the validated result.json to <path> (for CI / Testbench ingest).');
   console.error('');
   console.error('Models (presets or full ids):');
   console.error('  haiku (default), sonnet, opus, gemini-flash, gemini-pro, mock');
@@ -59,7 +66,7 @@ function encodeScreenshot(runDir, rel) {
 
 async function main() {
   loadEnv();
-  const { recipeId, runId, model, dryRun, force } = parseArgs(process.argv);
+  const { recipeId, runId, model, dryRun, force, report } = parseArgs(process.argv);
   if (!recipeId) { printUsage(); process.exit(1); }
 
   const run = runId ? findRun(recipeId, runId) : latestRun(recipeId);
@@ -119,10 +126,19 @@ async function main() {
     parsed.run_id = run.runId;
   }
 
-  fs.writeFileSync(resultPath, JSON.stringify(parsed, null, 2) + '\n');
+  const serialized = JSON.stringify(parsed, null, 2) + '\n';
+  fs.writeFileSync(resultPath, serialized);
   console.log(`Wrote ${path.relative(ROOT, resultPath)}`);
   console.log(`  overall_status: ${parsed.overall_status}`);
   console.log(`  checks: ${parsed.checks.length} (${parsed.checks.filter(c => c.verdict === 'pass').length} pass, ${parsed.checks.filter(c => c.verdict === 'fail').length} fail, ${parsed.checks.filter(c => c.verdict === 'warn').length} warn)`);
+
+  // --report <path>: also drop the validated result at a caller-given location (CI / Testbench
+  // ingest), so the consumer never has to discover the latest run folder.
+  if (report) {
+    fs.mkdirSync(path.dirname(path.resolve(report)), { recursive: true });
+    fs.writeFileSync(report, serialized);
+    console.log(`Also wrote ${report} (--report)`);
+  }
 }
 
 main().catch(e => { console.error('FATAL:', e.message); process.exit(1); });
